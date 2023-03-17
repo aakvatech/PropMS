@@ -89,7 +89,7 @@ def make_lease_invoice_schedule(leasedoc):
                 "invoice_number",
                 "date_to_invoice",
             ],
-            filters={"parent": lease.name, "date_to_invoice": (">", lease.end_date)},
+            filters={"parent": lease.name, "date_to_invoice": (">", lease.end_date)}, parent_doctype='Lease',
         )
         for lease_invoice_schedule in lease_invoice_schedule_list:
             frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
@@ -106,7 +106,7 @@ def make_lease_invoice_schedule(leasedoc):
                 filters={
                     "parent": lease.name,
                     "date_to_invoice": ("<", invoice_start_date),
-                },
+                }, parent_doctype='Lease',
             )
             # frappe.msgprint("Records before Invoice Start Date " + str(lease_invoice_schedule_list))
             for lease_invoice_schedule in lease_invoice_schedule_list:
@@ -122,12 +122,12 @@ def make_lease_invoice_schedule(leasedoc):
                     "invoice_number",
                     "date_to_invoice",
                 ],
-                filters={"parent": lease.name},
+                filters={"parent": lease.name}, parent_doctype='Lease',
             )
             lease_items_list = frappe.get_list(
                 "Lease Item",
                 fields=["name", "parent", "lease_item"],
-                filters={"parent": lease.name},
+                filters={"parent": lease.name}, parent_doctype='Lease',
             )
             # Create list of lease items that are part of lease.lease_item
             lease_item_name_list = [
