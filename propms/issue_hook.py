@@ -128,7 +128,7 @@ def make_sales_invoice(doc, for_self_consumption=None):
     def make_sales_pos_payment(invoice_doc, pos_profile_name):
         default_mode_of_payment = frappe.db.get_value(
             "Sales Invoice Payment",
-            {"parent": pos_profile_name, "default": 1},
+            {"parent": invoice_doc.name, "default": 1},
             ["mode_of_payment", "type", "account"],
             as_dict=1,
         )
