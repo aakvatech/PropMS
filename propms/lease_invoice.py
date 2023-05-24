@@ -108,34 +108,34 @@ def getCostCenter(name):
 
 
 @frappe.whitelist()
-def leaseInvoiceAutoCreate():
+def leaseInvoiceAutoCreate(invoices_schedule=None):
     """Prepare data to create sales invoice from lease invoice schedule. This is called from form button as well as daily schedule"""
     try:
-        # frappe.msgprint("Started")
-        invoice_start_date = frappe.db.get_single_value(
-            "Property Management Settings", "invoice_start_date"
-        )
-        lease_invoice = frappe.get_all(
-            "Lease Invoice Schedule",
-            filters={
-                "date_to_invoice": ["between", (invoice_start_date, today())],
-                "invoice_number": "",
-                "sales_order_number": ""
-            },
-            fields=[
-                "name",
-                "date_to_invoice",
-                "invoice_number",
-                "sales_order_number",
-                "parent",
-                "parent",
-                "invoice_item_group",
-                "lease_item",
-                "paid_by",
-                "currency",
-            ],
-            order_by="parent, paid_by, invoice_item_group, date_to_invoice, currency, lease_item",
-        )
+        if not invoices_schedule:
+            invoice_start_date = frappe.db.get_single_value(
+                "Property Management Settings", "invoice_start_date"
+            )
+            invoices_schedule = frappe.get_all(
+                "Lease Invoice Schedule",
+                filters={
+                    "date_to_invoice": ["between", (invoice_start_date, today())],
+                    "invoice_number": "",
+                    "sales_order_number": ""
+                },
+                fields=[
+                    "name",
+                    "date_to_invoice",
+                    "invoice_number",
+                    "sales_order_number",
+                    "parent",
+                    "parent",
+                    "invoice_item_group",
+                    "lease_item",
+                    "paid_by",
+                    "currency",
+                ],
+                order_by="parent, paid_by, invoice_item_group, date_to_invoice, currency, lease_item",
+            )
         # frappe.msgprint("Lease being generated for " + str(lease_invoice))
         row_num = 1  # to identify the 1st line of the list
         prev_parent = ""
@@ -148,7 +148,7 @@ def leaseInvoiceAutoCreate():
         item_dict = []
         item_json = {}
         # frappe.msgprint(str(lease_invoice))
-        for row in lease_invoice:
+        for row in invoices_schedule:
             # frappe.msgprint(str(invoice_item.name) + " " + str(invoice_item.lease_item))
             # Check if same lease, customer, invoice_item_group and date_to_invoice.
             # Also should not be 1st row of the list
@@ -262,3 +262,8 @@ def leaseInvoiceAutoCreate():
 @frappe.whitelist()
 def test():
     return today()
+
+
+@frappe.whitelist()
+def create_lease_voucher(invoice_schedule):
+    leaseInvoiceAutoCreate([frappe._dict(json.loads(invoice_schedule))])

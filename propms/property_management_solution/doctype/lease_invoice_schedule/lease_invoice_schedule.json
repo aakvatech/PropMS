@@ -12,6 +12,7 @@
   "paid_by",
   "lease_item_name",
   "document_type",
+  "create_voucher",
   "invoice_number",
   "sales_order_number",
   "qty",
@@ -114,11 +115,17 @@
    "fieldtype": "Select",
    "label": "Document Type",
    "options": "\nSales Invoice\nSales Order"
+  },
+  {
+   "depends_on": "eval: !doc.sales_order_number && !doc.invoice_number && doc.document_type",
+   "fieldname": "create_voucher",
+   "fieldtype": "Button",
+   "label": "Create Voucher"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2022-05-28 15:13:40.233162",
+ "modified": "2023-01-04 16:35:55.362846",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Lease Invoice Schedule",
