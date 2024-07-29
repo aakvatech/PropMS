@@ -65,7 +65,15 @@ doctype_js = {
 # ------------
 
 # before_install = "propms.install.before_install"
-# after_install = "propms.install.after_install"
+after_install = [    
+    "propms.utils.create_custom_fields.execute",
+    "propms.utils.create_property_setter.execute",
+]
+
+after_migrate = [
+    "propms.utils.create_custom_fields.execute",
+    "propms.utils.create_property_setter.execute",
+]
 
 # Desk Notifications
 # ------------------

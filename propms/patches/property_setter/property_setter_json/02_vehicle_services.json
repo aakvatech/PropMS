@@ -1,0 +1,10 @@
+[
+
+    {
+        "doc_type": "Vehicle Service",
+        "field_name": "frequency",
+        "property": "options",
+        "property_type": "Text",
+        "value": "NOT SELECTED\nMileage\nMonthly\nQuarterly\nHalf Yearly\nYearly"
+    }
+]
